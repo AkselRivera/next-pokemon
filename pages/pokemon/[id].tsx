@@ -1,21 +1,57 @@
+import React, { FC, useState, useEffect } from 'react'
+
 import { pokeApi } from '@/api'
 import { MainLayout } from '@/components/layouts'
 import { Pokemon } from '@/interfaces'
+import { localFavorites } from '@/utils'
 import { Button, Card, Container, Grid, Text } from '@nextui-org/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
-import React, { FC } from 'react'
+
+import confetti from 'canvas-confetti'
 
 interface Props {
   pokemon: Pokemon
 }
 
 const PokemonPage: FC<Props> = ({ pokemon }) => {
+  const [isInFavorites, setIsInFavorites] = useState(false)
+  const [buttonText, setButtonText] = useState('Guardar en favoritos')
+
+  useEffect(() => {
+    localFavorites.existInFavorites(pokemon.id)
+      ? setButtonText('En favoritos')
+      : setButtonText('Guardar en favoritos')
+  }, [pokemon])
+
+  useEffect(() => {
+    isInFavorites
+      ? setButtonText('En favoritos')
+      : setButtonText('Guardar en favoritos')
+  }, [isInFavorites])
+
+  function onToggleFavorite() {
+    localFavorites.toggleFavorites(pokemon.id)
+    setIsInFavorites(!isInFavorites)
+
+    if (!isInFavorites) {
+      confetti({
+        zIndex: 999,
+        particleCount: 100,
+        spread: 160,
+        angle: -100,
+        origin: {
+          x: 1,
+          y: 0,
+        },
+      })
+    }
+  }
   return (
-    <MainLayout title="Algun pokkemon">
+    <MainLayout title={`Pokemon - ${pokemon.name}`}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
         <Grid xs={12} sm={4}>
-          <Card hoverble css={{ padding: '30px' }}>
+          <Card hoverable css={{ padding: '30px', border: 0 }}>
             <Card.Body>
               <Card.Image
                 src={
@@ -31,15 +67,22 @@ const PokemonPage: FC<Props> = ({ pokemon }) => {
         </Grid>
 
         <Grid xs={12} sm={8}>
-          <Card>
+          <Card css={{ border: 0 }}>
             <Card.Header
-              css={{ display: 'flex', justifyContent: 'space-between' }}
+              css={{
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
             >
               <Text h1 transform="capitalize">
                 {pokemon.name}
               </Text>
-              <Button color="gradient" ghost>
-                Guardar en favoritos
+              <Button
+                color="gradient"
+                ghost={!isInFavorites}
+                onClick={onToggleFavorite}
+              >
+                {buttonText}
               </Button>
             </Card.Header>
             <Card.Body>

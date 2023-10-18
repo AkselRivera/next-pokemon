@@ -23,14 +23,14 @@ export const Navbar = () => {
         width={70}
         height={70}
       />
-      <NextLink href="/" passHref>
+      <NextLink href="/" legacyBehavior>
         <Link>
           <Text h2>P</Text>
           <Text h3>ókemon</Text>
         </Link>
       </NextLink>
       <Spacer css={{ flex: 1 }} />
-      <NextLink href="/favorites" passHref>
+      <NextLink href="/favorites" legacyBehavior>
         <Link css={{ marginRight: '15px' }}>Favoritos</Link>
       </NextLink>
     </div>
