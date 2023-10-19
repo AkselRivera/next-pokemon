@@ -27,7 +27,7 @@ export const MainLayout: FC<CustomProps> = ({
         <meta property="og:title" content={`Información sobre ${title}`} />
         <meta
           property="og:description"
-          content={`Esta es la pagina sobre ${title}`}
+          content={`Esta es la pagina sobre ${title} -By Aksel Pókemon App`}
         />
         <meta property="og:image" content={`${origin}/img/banner.png`} />
       </Head>

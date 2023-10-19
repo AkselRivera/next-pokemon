@@ -26,7 +26,7 @@ export const Navbar = () => {
       <NextLink href="/" legacyBehavior>
         <Link>
           <Text h2>P</Text>
-          <Text h3>ókemon</Text>
+          <Text h3>ókemon!</Text>
         </Link>
       </NextLink>
       <Spacer css={{ flex: 1 }} />
