@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/layouts'
 import { localFavorites } from '@/utils'
 import { FavoritesPokemons, NoFavorites } from '@/components/ui'
 
-function index() {
+function FavoritesPage() {
   const [favoritePokemons, setFavoritePokemons] = useState<number[]>([])
 
   useEffect(() => {
@@ -21,4 +21,4 @@ function index() {
   )
 }
 
-export default index
+export default FavoritesPage
