@@ -138,7 +138,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
     paths: results.map((pokemon) => ({
       params: { name: pokemon.name },
     })),
-    fallback: false,
+    // fallback: false,
+    fallback: 'blocking',
 
     // ***  APUNTES como se ve realmente el getStaticPaths***
     // paths: [
@@ -155,9 +156,20 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { name } = params as { name: string }
 
+  const pokemon = await getPokemonInfo(name.toLowerCase())
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: {
-      pokemon: await getPokemonInfo(name),
+      pokemon,
     },
   }
 }

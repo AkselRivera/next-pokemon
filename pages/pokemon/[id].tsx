@@ -47,7 +47,7 @@ const PokemonPage: FC<Props> = ({ pokemon }) => {
     }
   }
   return (
-    <MainLayout title={`Pokemon - ${pokemon.name}`}>
+    <MainLayout title={`${pokemon.name}`}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
         <Grid xs={12} sm={4}>
           <Card hoverable css={{ padding: '30px', border: 0 }}>
@@ -134,7 +134,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
   return {
     paths: pokemons151.map((id) => ({ params: { id } })),
-    fallback: false,
+    // Incremental Static Generation (ISG)
+    fallback: 'blocking',
 
     // ***  APUNTES como se ve realmente el getStaticPaths***
     // paths: [
@@ -151,9 +152,22 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string }
 
+  const pokemon = await getPokemonInfo(id)
+  // Incremental Static Generation (ISG)
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: {
-      pokemon: await getPokemonInfo(id),
+      pokemon,
     },
+    // Incremental Static Regeneration (ISR)
+    revalidate: 86400, // 60 * 60 * 24
   }
 }
